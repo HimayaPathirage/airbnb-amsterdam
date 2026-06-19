@@ -7,17 +7,20 @@
 
 **Shape:** 10,480 rows × 79 columns
 
-**Column groups identified:**
-- Identifiers/Metadata: id, listing_url, scrape_id, last_scraped, source, calendar_updated, calendar_last_scraped, license
-- Listing Content: name, description, neighborhood_overview, picture_url, amenities
-- Host Info: host_id, host_name, host_since, host_response_rate, host_is_superhost, etc.
-- Location: neighbourhood, neighbourhood_cleansed, neighbourhood_group_cleansed, latitude, longitude
-- Property Attributes: property_type, room_type, accommodates, bathrooms, bedrooms, beds
-- Pricing & Booking Rules: price, minimum_nights, maximum_nights, instant_bookable
-- Availability: has_availability, availability_30/60/90/365, availability_eoy
-- Reviews & Demand: number_of_reviews, review_scores_*, reviews_per_month
-- Derived/Estimated: estimated_occupancy_l365d, estimated_revenue_l365d
-- Host Portfolio: calculated_host_listings_count*
+### Column Groups Identified
+
+| Category Name | Short Description | Core Columns |
+| :--- | :--- | :--- |
+| **Identifiers & Metadata** | Internal system tracking codes. They help keep everything unique and traceable. | `id`, `listing_url`, `scrape_id`, `last_scraped`, `source`, `calendar_updated`, `calendar_last_scraped`, `license` |
+| **Listing Content** | Public advertising texts and details that guests see when browsing. | `name`, `description`, `neighborhood_overview`, `picture_url`, `amenities` |
+| **Host Info** | Profile attributes, performance metrics, and trust badges relating to the property owner. | `host_id`, `host_name`, `host_since`, `host_response_rate`, `host_is_superhost` |
+| **Location** | Geographic coordinates and neighborhood tracking attributes. | `neighbourhood`, `neighbourhood_cleansed`, `neighbourhood_group_cleansed`, `latitude`, `longitude` |
+| **Property Attributes** | Physical design features, room types, and layout capacity rules. | `property_type`, `room_type`, `accommodates`, `bathrooms`, `bedrooms`, `beds` |
+| **Pricing & Booking Rules** | Financial costs and reservation rules set by the host for booking. | `price`, `minimum_nights`, `maximum_nights`, `instant_bookable` |
+| **Availability** | Rolling calendar vacancy schedules showing when the property is open. | `has_availability`, `availability_30/60/90/365`, `availability_eoy` |
+| **Reviews & Demand** | Historical customer feedback counts and overall satisfaction scores. | `number_of_reviews`, `review_scores_*`, `reviews_per_month` |
+| **Derived & Estimated** | Modeled performance metrics calculated by Inside Airbnb to estimate bookings. | `estimated_occupancy_l365d`, `estimated_revenue_l365d` |
+| **Host Portfolio** | Total property counts managed by the same account to find commercial operators. | `calculated_host_listings_count*` |
 
 **Key null findings:**
 - `neighbourhood_group_cleansed` — 100% null (unusable for Amsterdam, will drop)
@@ -37,6 +40,7 @@
 ## File: calendar.csv.gz
 
 **Shape:** 3,825,200 rows × 7 columns
+
 **Columns:** listing_id, date, available, price, adjusted_price, minimum_nights, maximum_nights
 
 **Key findings:**
@@ -51,6 +55,7 @@
 
 ## File: reviews.csv / reviews.csv.gz
 **Shape:** ~501,084 rows (consistent with reviews.csv summary) × 6 columns
+
 **Columns:** listing_id, id, date, reviewer_id, reviewer_name, comments
 
 **Key findings:**
@@ -68,6 +73,7 @@
 
 ## File: neighbourhoods.csv
 **Shape:** 22 rows × 2 columns
+
 **Columns:** neighbourhood_group, neighbourhood
 
 **Key findings:**
