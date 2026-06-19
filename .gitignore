@@ -1,0 +1,29 @@
+# Data files (too large for git, downloadable via script instead)
+data/raw/*
+data/processed/*
+!data/raw/.gitkeep
+!data/processed/.gitkeep
+
+# Python
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+venv/
+.venv/
+*.egg-info/
+
+# Environment / secrets
+.env
+*.key
+credentials.json
+
+# OS junk
+.DS_Store
+Thumbs.db
+
+# Jupyter
+.ipynb_checkpoints
+
+# Large generated outputs
+*.log
+*.db
