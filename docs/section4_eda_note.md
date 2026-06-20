@@ -162,3 +162,139 @@ expandable market segment.
 
 ---
 
+## 4.3 Pricing Over the Calendar Year - Limitation
+
+**Finding:** calendar.csv.gz's price and adjusted_price fields are 
+100% null (0 non-null values out of 3,825,200 rows), confirmed again 
+here. This was first identified in Section 3.1 and is a known dataset 
+limitation (scraping artifact specific to this city/batch).
+
+**Conclusion:** True seasonal pricing analysis (how nightly price 
+itself changes month to month) cannot be performed with this dataset, 
+since no source field captures price over time. listings.csv.gz only 
+contains a single, current snapshot price per listing, not a 
+historical or forward time series.
+
+**Workaround attempted:** Section 4.1 already analyzed seasonal 
+AVAILABILITY patterns (using the available t/f field), which serves 
+as a partial proxy for demand intensity by month, even though it 
+cannot speak to price itself. This is the closest substitute available 
+within this dataset's constraints.
+
+**Honest scope decision:** This specific bullet point is not fully 
+achievable with the data as provided. Rather than fabricate a price-
+over-time chart from unusable data, this limitation is documented 
+directly, consistent with the assignment's emphasis on honest 
+prioritization over completing every bullet point regardless of 
+feasibility.
+
+## 4.3 Review Volume Trends Over Time - Business Interpretation
+
+Review volume, used here as a proxy for booking activity, shows strong, 
+consistent year-over-year growth from 2010 through 2019 (7 reviews to 
+nearly 50,000), reflecting Amsterdam's broader adoption of short-term 
+rentals over the decade. This growth is sharply interrupted in 2020 
+(down to 17,883, a clear COVID-19 travel collapse), with a partial 
+recovery in 2021 still well below pre-pandemic levels. By 2022-2024, 
+volume not only recovered but substantially exceeded 2019 levels, 
+peaking at 85,885 reviews in 2024, suggesting Amsterdam's short-term 
+rental demand is structurally larger post-pandemic than it was before 
+it. The apparent drop in 2025 (64,756) should not be read as a genuine 
+decline: since the dataset was scraped in September 2025, this figure 
+reflects only a partial year and is not directly comparable to the 
+full-year totals for prior years. For a market intelligence 
+consultancy, the key takeaway is that Amsterdam's market has not just 
+recovered from the pandemic but grown beyond its previous scale, 
+demand-side fundamentals appear stronger now than at any prior point 
+in the dataset's history.
+
+## 4.3 Host Tenure vs. Price - Business Interpretation
+
+Host tenure shows only a weak relationship with pricing. Newer hosts 
+(0-2 years) show the lowest median price (€213), slightly below more 
+established hosts (€222-232 across other tenure groups), which may 
+reflect new hosts pricing more conservatively to attract initial 
+bookings and reviews. However, the gap is modest, not dramatic, and 
+there is no clear, continuously increasing trend with tenure; 5-10 
+year and 10+ year hosts show nearly identical median pricing. For a 
+market intelligence consultancy, this suggests host experience alone 
+is not a strong driver of pricing strategy in this market; other 
+factors (property type, location, host professionalism level) likely 
+matter considerably more than simple time-on-platform.
+
+## 4.3 Minimum Night Policies - Findings & Limitations
+
+**Finding:** 71 listings (0.7% of total) require minimum stays over 30 
+nights, with names like "Student Haven: Long-Term Retreat for 
+Scholars" and "17th Century Monumental House with Garden" confirming 
+these are genuine long-term/extended-stay rentals, not data errors. 
+This represents a distinct market segment operating alongside the 
+standard short-term tourist rental market (median minimum_nights of 
+2-3 for the broader market).
+
+**Limitation on seasonal analysis:** The bullet asks how minimum night 
+policies shift across seasons or events. listings.csv.gz only provides 
+a current snapshot of minimum_nights (plus minimum_minimum_nights/
+maximum_minimum_nights, which capture a forward-looking range but not 
+which specific months correspond to which values). A true month-by-
+month breakdown would require pulling minimum_nights directly from 
+calendar.csv.gz by date, which was not pursued further given time 
+constraints and the modest expected analytical payoff relative to 
+other priorities this week.
+
+**Business interpretation:** The presence of a small but distinct 
+long-term-stay segment (0.7% of listings) suggests some hosts use 
+Airbnb as a flexible alternative to traditional long-term leasing, 
+likely for reasons including avoiding standard tenant protection 
+laws or seeking higher effective returns than long-term leases. This 
+is a noteworthy edge case for a market intelligence consultancy to be 
+aware of, but it represents a small enough share of supply that it 
+should not be conflated with the core short-term rental market 
+analysis the rest of this report focuses on.
+
+---
+
+## 4.4 Superhost Status and Property Type - Business Interpretation
+
+The earlier finding that non-superhosts price higher on average than 
+superhosts (Section 3.4) is explained by a confound: property type mix 
+differs sharply between the two groups. Superhosts run a much higher 
+share of private-room listings (36.7% vs. 7.8% for non-superhosts), 
+the profile of an individually-managed, highly responsive host, while 
+non-superhosts skew heavily toward entire-place listings (85.5%), 
+often consistent with commercial or investment-style operations less 
+focused on the responsiveness metrics superhost status requires. For 
+a market intelligence consultancy, this means superhost status should 
+not be interpreted as a direct price signal; it is better understood 
+as a proxy for host management style (hands-on, responsive individual 
+hosts vs. larger-scale commercial operators), with pricing differences 
+driven by what they list, not by their service quality tier itself.
+
+## 4.4 Professional vs. Casual Host Pricing - Business Interpretation
+
+Single-listing (casual) hosts price higher on average (€275.75 median 
+€227) than multi-listing (commercial) hosts (€260.69, median €189). 
+Unlike the superhost finding, this is not fully explained by a single 
+clean property-type confound: commercial hosts run a more diversified 
+portfolio, including a meaningful share of hotel rooms (22.1%, vs. 
+just 0.1% for casual hosts) and private rooms (32.4% vs. 8.9%), 
+categories that individually price lower than entire-place listings. 
+Casual hosts, by contrast, concentrate heavily in entire-place listings 
+(87.3%), consistent with renting out their own home or a single 
+higher-value investment property. For a market intelligence 
+consultancy, this suggests commercial operators compete partly on 
+volume and portfolio diversification across price tiers, rather than 
+purely on premium per-unit pricing, while casual hosts effectively 
+each represent a single, often higher-value listing with less 
+portfolio flexibility.
+
+## 4.4 Market Concentration (Cross-Reference to Section 4.1)
+
+Already established in Section 4.1: 93.7% of hosts manage exactly one 
+listing (82.3% of total supply), while the remaining 6.3% of hosts 
+(multi-listing/commercial operators) control 17.7% of listings. This 
+directly answers Section 4.4's market concentration question: supply 
+is NOT concentrated in a small commercial elite; it remains 
+predominantly an individual, small-scale hosting market, with 
+commercial operators present but representing a clear minority of 
+total inventory.

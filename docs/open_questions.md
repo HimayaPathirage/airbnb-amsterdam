@@ -36,3 +36,22 @@ This needs deeper investigation in Section 4.5 (Review & Demand-Side
 Analysis) rather than being taken at face value.
 
 **Added to open_questions.md** for follow-up during Section 4.5.
+
+## 1. host_is_superhost null values (115 listings) - RESOLVED
+**Finding:** 115 listings have null superhost status. Of these, 38 
+also lack host_response_rate and 30 lack host_acceptance_rate, but 
+all 115 have a valid host_since date. This suggests these are hosts 
+with insufficient response/booking history for Airbnb to calculate 
+superhost eligibility, not simply incomplete profiles overall.
+**Status:** RESOLVED, documented in Section 4.4 notes.
+
+## 2. Superhost vs non-superhost pricing gap - RESOLVED
+**Finding:** Property type mix fully explains the Section 3.4 finding. 
+Non-superhosts are 85.5% Entire place listings (only 7.8% Private 
+room), while superhosts are only 46.3% Entire place but 36.7% Private 
+room, nearly 5x the share. Since entire-place listings cost 
+substantially more than private rooms across the market (Section 3.4 
+Query 3), this property-type composition difference, not superhost 
+status itself, explains why non-superhosts show a higher average 
+price.
+**Status:** RESOLVED, documented in Section 4.4 notes.
