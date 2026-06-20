@@ -1,5 +1,7 @@
 # Section 4 — EDA Notes
 
+---
+
 ## 4.1 Descriptive Statistics — Key Findings
 
 - **Price:** Median €222/night is more representative than the mean 
@@ -93,3 +95,70 @@ For a market operator, this means pricing strategies should expect
 tighter supply (and likely stronger pricing power) from June through 
 September, with more competitive, open inventory in winter months. 
 One caveat: since the data reflects a rolling 365-day window
+
+---
+
+## 4.2 Listing Density Map - Business Interpretation
+
+Listing supply is heavily concentrated in central Amsterdam, with the 
+darkest-shaded neighbourhood (the highest density tier, 1,808 listings) 
+sitting directly in the historic city center. Density fades 
+progressively outward toward the city's edges, where neighbourhoods 
+show far fewer listings. For a market operator or new host considering 
+where to enter the market, this confirms that central neighbourhoods 
+are both the most competitive (highest supply) and, per the earlier 
+price analysis, simultaneously the highest-priced areas; central 
+positioning offers strong demand but also the most direct competition 
+from other hosts.
+
+## 4.2 Geographic Pricing Gradient - Business Interpretation
+
+Distance from the city center shows essentially no linear correlation 
+with price (r = 0.022). Visual inspection reveals why: the highest 
+priced listings, including most premium and luxury-tier properties, 
+cluster within the first 1-2km of the center, but plenty of low-priced 
+listings exist in that same zone too, meaning price variation close to 
+the center is driven by property type and quality rather than fine-
+grained location. Beyond roughly 5-6km, the price range narrows and 
+shifts lower overall, suggesting a loose outer boundary rather than a 
+smooth pricing gradient. For a market intelligence consultancy, this 
+means "distance from center" alone is a weak pricing predictor; 
+property type, room type, and neighbourhood-specific factors (as shown 
+in the earlier neighbourhood comparison) matter far more than simple 
+proximity once a listing is already within Amsterdam's compact, 
+walkable core.
+
+## 4.2 Spatial Review Score Patterns - Business Interpretation
+
+While most Amsterdam neighbourhoods cluster tightly within the 4.80-
+4.88 range (consistent with the citywide rating inflation pattern 
+found in Section 4.1), two neighbourhoods stand out as genuinely lower 
+scoring: Bijlmer-Centrum (4.64 average, based on 61 rated listings) and 
+Gaasperdam - Driemond (4.71 average, 57 rated listings). Both are 
+located in Amsterdam's southeastern Bijlmer district, a residential 
+area architecturally and demographically distinct from the historic 
+city center. With sample sizes in the 50-60+ range, this gap is 
+unlikely to be a statistical fluke. For a market intelligence 
+consultancy, this suggests the Bijlmer area may have a genuine guest 
+experience gap worth investigating further, whether driven by property 
+condition, host responsiveness, or guest expectations mismatched to a 
+less touristic residential area, rather than being explained away as 
+random noise in an otherwise inflated rating system.
+
+## 4.2 Property Type Geographic Clustering - Business Interpretation
+
+Houseboat/Boat listings show a clear, non-random spatial pattern, 
+tracing distinct linear and curved paths across the map rather than 
+spreading evenly like most other property types. These patterns 
+almost certainly correspond to Amsterdam's canal network, since 
+houseboats can only be located on waterways, meaning the geography 
+itself constrains where this property type exists. For a market 
+intelligence consultancy, this means houseboat supply is structurally 
+limited and cannot expand into arbitrary new neighbourhoods the way 
+entire-place or private-room listings can; any analysis of growth 
+potential for this category must account for a hard physical ceiling 
+on available canal frontage, rather than treating it as a normal, 
+expandable market segment.
+
+---
+
