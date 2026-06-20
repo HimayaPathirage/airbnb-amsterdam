@@ -271,3 +271,100 @@ city-name standardization needed (single-city dataset).
 that some raw values technically had, but this level of precision 
 provides no meaningful analytical benefit and adds noise/inconsistency 
 instead.
+
+## Section 3.3 — Review Count Cross-Validation
+
+**Date:** June 20, 2026
+
+**Finding:** Computed review counts independently from reviews.csv 
+(grouping by listing_id) and compared against listings.csv.gz's 
+pre-existing number_of_reviews column. Result: 0 mismatches across all 
+10,480 listings — perfect agreement.
+
+**Decision:** This confirms strong internal consistency between the 
+two files. number_of_reviews can be trusted as accurate; 
+review_count_computed serves primarily as a validation artifact and 
+will be dropped from the final enriched table to avoid redundant 
+columns (unless needed later for date-filtered review counts, e.g., 
+"reviews in the last 90 days," which would require a fresh groupby on 
+a filtered reviews.csv).
+
+## Section 3.3 — Occupancy Rate Calculation
+
+**Date:** June 20, 2026
+
+**Method:** Computed occupancy_rate_calculated per listing as the 
+proportion of calendar days marked unavailable ('f') out of all 365 
+days in calendar.csv.gz.
+
+**Finding:** Mean occupancy rate 74.2%, consistent with the overall 
+unavailable-day proportion found in Section 3.1 (74.2% of all 3.8M 
+listing-days). Median 94.5% but 25th percentile only 52.6% — distribution 
+is left-skewed toward high "occupancy."
+
+**Caveat (per Section 3.1 data dictionary finding):** This metric 
+cannot distinguish between genuinely booked days and host-blocked 
+days. A listing showing 100% "occupancy" may simply have a host who 
+manually closed their calendar rather than one that is fully booked by 
+guests. This will be explicitly stated wherever occupancy_rate_calculated 
+is used in EDA or reporting — it is a proxy for unavailability, not 
+confirmed bookings.
+
+**Decision:** Retain as occupancy_rate_calculated (not renamed to 
+"booking rate" or similar, to keep the ambiguity visible in the column 
+name itself).
+
+## Section 3.3 — Neighbourhood-Level Aggregates
+
+**Date:** June 20, 2026
+
+**Method:** Grouped listings by neighbourhood_cleansed, computed median 
+price, listing count, and average review rating per neighbourhood, 
+merged back onto every listing row.
+
+**Finding:** Median prices range €169-€250 across neighbourhoods 
+(sample), with no invalid values. Listing counts range 125-1,207, 
+confirming real density variation (Centrum-West, De Pijp - 
+Rivierenbuurt are most saturated). Average ratings are tightly 
+clustered (4.80-4.88) with little neighbourhood-level variation — early 
+indication of the rating-inflation pattern that Section 4.1 EDA will 
+investigate formally.
+
+**Decision:** Retain all three aggregate columns 
+(neighbourhood_median_price, neighbourhood_listing_count, 
+neighbourhood_avg_rating) as enrichment features for downstream EDA 
+and modeling (e.g., comparing a listing's own price to its 
+neighbourhood's median).
+
+## Section 3.3 — Derived Field Corrections (price_per_bedroom, review_frequency)
+
+**Date:** June 20, 2026
+
+**Issue found:** price_per_bedroom initially leaked confirmed price 
+errors (the 7 listings flagged ≥€40,000/night) straight through, 
+producing values up to €80,018/bedroom.
+
+**Fix:** Applied price_outlier_flag exclusion before computing 
+price_per_bedroom. Max dropped to €11,000/bedroom — this is one of the 
+6 "borderline high but unconfirmed" listings from the €3,930-€13,978 
+range (Section 3.1 decision), correctly passing through since that 
+range was deliberately not excluded, only flagged for EDA-stage review.
+
+**Issue investigated:** review_frequency showed a max of 1,201 
+reviews/year. Initially suspected a tenure-floor calculation issue; 
+added a 30-day minimum tenure threshold as a guard.
+
+**Finding:** The extreme value traced to listing 50383849: 
+host_tenure_years=4.24 (well above the 30-day floor), 
+review_count_computed=5,097 — the same listing previously identified 
+in Section 3.1 as having the dataset's maximum review count. This is 
+the same legitimate high-volume listing, not a tenure-calculation 
+artifact. The 30-day floor fix was correctly implemented but was never 
+going to resolve this specific case, since it solves a different 
+problem (new hosts with near-zero tenure).
+
+**Decision:** No further capping applied to review_frequency. Consistent 
+with the Section 3.1 decision on number_of_reviews, this is treated as 
+genuine right-skewed business variation (a high-turnover listing), not 
+a data error. Will be visualized on a log scale in EDA rather than 
+excluded or capped.
