@@ -56,14 +56,14 @@ manual name-based verification of the most extreme listings.
 ~€2,975 (round-number clustering at €500 suggests deliberate host 
 pricing, not errors). A moderate, unconfirmed jump occurs at 
 €3,930–€13,978 (6 listings). A clear, severe break occurs at €40,000+ 
-(5 listings), independently confirmed via listing names as data entry 
+(7 listings), independently confirmed via listing names as data entry 
 errors or test listings (e.g., two "Havenlodge" listings at €80,018/
-night for 4 guests, multiple "Hotel room" listings at €40,000-€50,000 
-for 2-6 guests, and one listing literally named "test host, don't 
-book").
+night for 4 guests, multiple "Hotel room"-style listings at 
+€40,000-€50,000 for 2-6 guests, and one listing literally named 
+"test host, don't book").
 
 **Decision:** 
-- Listings priced ≥ €40,000/night (5 listings) flagged via a new 
+- Listings priced ≥ €40,000/night (7 listings) flagged via a new 
   boolean column `price_outlier_flag = True` and excluded from all 
   price-based statistics, distributions, and modeling.
 - Listings priced €3,930–€13,978 (6 listings) kept but visually 
@@ -76,6 +76,9 @@ visible statistical gap and independent name-based confirmation. We
 accept the small risk that 1-2 borderline rows near the cutoff could 
 be misclassified in either direction.
 
+**Correction (June 20):** Original entry stated 5 listings at the 
+€40,000+ threshold; verified count via clean.py implementation is 
+actually 7 listings. Text corrected, threshold and reasoning unchanged.
 ---
 
 ## Section 3.1 — reviews.csv "Duplicate" Investigation
@@ -150,3 +153,121 @@ Amsterdam's expected bounds (lat 52.29-52.43, long 4.76-5.03). No
 invalid or out-of-bounds coordinates found.
 
 **Decision:** No cleaning or filtering needed for geographic fields.
+
+## Section 3.2 — Date Parsing Verification
+
+**Date:** June 20, 2026
+
+**Finding:** Parsed last_scraped, first_review, last_review, and 
+host_since to proper datetime format. first_review/last_review nulls 
+(1,097) confirmed to exactly match the known count of listings with 
+zero reviews — not a parsing issue. host_since nulls (3) confirmed to 
+be genuinely null in raw data, not malformed text — 0 actual parsing 
+failures across all 4 date columns.
+
+**Decision:** No further action needed; all date fields parse cleanly.
+
+## Section 3.2 — Property Type Normalization
+
+**Date:** June 20, 2026
+
+**Options considered:**
+1. Use the raw property_type field as-is (63 unique values) for any 
+   grouped analysis.
+2. Use only room_type (4 clean categories) and ignore property_type 
+   entirely.
+3. Build a custom grouping function to collapse property_type into a 
+   manageable number of categories, preserving meaningful Amsterdam-
+   specific segments. (CHOSEN)
+
+**Why this approach:** Option 1 was rejected — 63 categories is too 
+granular for most aggregate analysis (e.g., price-by-property-type 
+charts would be unreadable). Option 2 was rejected because room_type 
+alone loses meaningful distinctions — e.g., houseboats and hotel rooms 
+are not captured at all by room_type's 4 categories, despite being 
+significant segments in Amsterdam's market (392 houseboats/boats, 418 
+hotel-style rooms). Option 3 was chosen to preserve this signal while 
+still reducing complexity to a manageable number of groups.
+
+**Finding:** An initial keyword-based grouping (entire/private/shared/
+hotel only) produced an "Other" bucket of 364 listings (3.5%), which on 
+inspection contained 308 houseboats/boats — a significant, Amsterdam-
+specific accommodation type, not a rare edge case. Refined the function 
+to add dedicated "Houseboat/Boat" and "Room in other" categories, 
+reducing "Other" to 30 listings (0.3%) containing only genuine rare 
+one-offs (Tiny home, Tent, Yurt, Cave, etc.).
+
+**Decision:** New column `property_type_grouped` created with 7 
+categories: Entire place, Private room, Hotel room, Houseboat/Boat, 
+Shared room, Room in other, Other. Original property_type column 
+preserved unchanged.
+
+**Note:** property_type_grouped's "Hotel room" count (418) differs from 
+room_type's "Hotel room" count (49) — these measure different things. 
+room_type reflects Inside Airbnb's stricter booking-type classification; 
+property_type_grouped reflects the host's self-described property 
+style. Both fields will be retained for different analytical purposes.
+
+## Section 3.2 — Missing Value Handling
+
+**Date:** June 20, 2026
+
+**Decision:** Dropped 4 unreliable/dead columns (neighbourhood_group_cleansed, 
+calendar_updated, host_neighbourhood, neighbourhood — all either 100% 
+null or too unreliable per Section 2 assumptions). For remaining 
+high-null fields (beds, bathrooms, price), chose explicit-null strategy 
+over imputation, with added boolean flag columns (beds_missing, 
+bathrooms_missing, price_missing) so missingness itself remains a 
+visible, analyzable signal rather than being silently filled with 
+potentially misleading values.
+
+**Verification:** Flag counts confirmed against Section 3.1 profiling: 
+beds_missing=4576 (43.7%), bathrooms_missing=4548 (43.4%), 
+price_missing=4606 (44.0%) — all match exactly.
+
+**Trade-off accepted:** Explicit nulls mean any aggregate price/bedroom 
+statistic will be computed on a reduced sample (~56-57% of listings), 
+not the full dataset. This is preferable to imputation, which would 
+risk fabricating systematic bias (e.g., imputing mean price would 
+understate true price variance).
+
+## Section 3.2 — Domain Validation Rules
+
+**Date:** June 20, 2026
+
+**Rules checked:**
+1. price_clean >= 0
+2. accommodates >= 1
+3. minimum_nights >= 1
+4. host_since_parsed <= last_scraped_parsed (host cannot join after 
+   the scrape date)
+5. latitude/longitude within Amsterdam bounds (verified separately in 
+   Section 3.1 — 0 violations)
+
+**Finding:** Zero violations across all 5 rules, out of 10,480 rows.
+
+**Decision:** No records removed or flagged for domain-rule violations. 
+This dataset shows strong structural integrity on basic logical 
+constraints — the data quality issues found elsewhere (missing prices, 
+extreme outliers) are about completeness and statistical extremity, 
+not logical impossibility.
+
+## Section 3.2 — Geographic Field Standardization
+
+**Date:** June 20, 2026
+
+**Finding:** Neighbourhood names already verified clean (22/22 exact 
+match across files, Section 2). Latitude/longitude values had 
+inconsistent decimal precision (ranging 1-16 decimal places, likely 
+floating-point artifacts), though all were already within valid 
+Amsterdam bounds (Section 3.1).
+
+**Decision:** Rounded latitude/longitude to a consistent 5 decimal 
+places (~1.1m precision) using `.round(5)`. Verified via 
+`.round(5).equals()` that all values are correctly standardized. No 
+city-name standardization needed (single-city dataset).
+
+**Trade-off accepted:** 5 decimal places sacrifices sub-meter precision 
+that some raw values technically had, but this level of precision 
+provides no meaningful analytical benefit and adds noise/inconsistency 
+instead.
