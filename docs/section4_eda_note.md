@@ -298,3 +298,54 @@ is NOT concentrated in a small commercial elite; it remains
 predominantly an individual, small-scale hosting market, with 
 commercial operators present but representing a clear minority of 
 total inventory.
+
+---
+
+## 4.5 Review Count, Score, and Price Relationships - Business Interpretation
+
+All three pairwise relationships (review count vs. score, review count 
+vs. price, score vs. price) are weak to negligible (correlations 
+between -0.09 and -0.05). This is consistent with the rating inflation 
+pattern already identified in Section 4.1: since nearly all listings 
+score within a narrow 4.5-5.0 band, there simply isn't enough variance 
+in review scores left to meaningfully correlate with price or 
+popularity. For a market intelligence consultancy, this reinforces 
+that review score is not a useful input for price modeling or demand 
+prediction in this market; review COUNT (a volume signal) and 
+qualitative review text are far more likely to carry useful 
+information than the numeric score itself.
+
+## 4.5 High Review Count, Low Score Listings - Business Interpretation
+
+51 listings combine high review volume (100+ reviews) with below-
+average scores (under 4.5). This group is dominated by Private room 
+(25) and Hotel room (16) property types, 80% of the group, with a 
+median price of just €118, well below the overall market median of 
+€222. This pattern suggests these are largely budget, shared-style, or 
+hostel-like accommodations: high booking volume reflects their 
+affordability and accessibility, while comparatively lower scores 
+likely reflect the inherent trade-offs of shared facilities, smaller 
+spaces, or more basic amenities relative to private entire-home stays. 
+For a market intelligence consultancy, this is not necessarily a 
+quality failure signal, it likely reflects guests in the budget segment 
+having somewhat different (and perhaps more critical) expectations, 
+or genuinely experiencing more friction points in shared accommodation 
+formats, rather than these hosts performing poorly relative to their 
+market segment.
+
+## 4.5 Review Score Sub-Dimensions - Business Interpretation
+
+Unlike the heavily inflated overall review_scores_rating, breaking 
+ratings into sub-dimensions reveals real, meaningful variation. 
+Value scores lowest (mean 4.65) and shows the widest spread (std 0.32) 
+of any sub-dimension, while communication (4.91) and check-in (4.89) 
+score highest and most consistently. Cleanliness (4.78) is the second-
+lowest dimension. For a market intelligence consultancy, this is a 
+genuinely actionable finding: guests are most critical of whether a 
+stay felt worth its price, not of how hosts communicated or handled 
+check-in. This suggests pricing strategy and guest value perception, 
+not host responsiveness, is the area with the most room for 
+differentiation and improvement across the market. A host or platform 
+looking to improve guest satisfaction should focus on value 
+perception and cleanliness rather than communication, which is 
+already performing near its ceiling for nearly all listings.
