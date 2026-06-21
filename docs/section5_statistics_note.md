@@ -174,3 +174,150 @@ established in Section 3.1 and re-confirmed in Section 4.3, this field
 is 100% null for Amsterdam across all 3,825,200 calendar rows. 
 listings.csv.gz only provides a single static current price per 
 listing, with no day-of-week breakdown possible.
+
+## 5.2 Confidence Intervals - Business Interpretation
+
+Confidence intervals reveal an important nuance the overall Kruskal-
+Wallis test (H4) cannot show on its own: while neighbourhood price 
+differences are statistically significant overall, not every pair of 
+neighbourhoods is clearly distinguishable from each other. Centrum-
+West, Centrum-Oost, and Zuid have overlapping confidence intervals, 
+meaning we cannot confidently say their true average prices differ 
+from one another, despite showing different point estimates (€315.88, 
+€307.72, €309.58). In contrast, Centrum-West's interval does not 
+meaningfully overlap with De Baarsjes - Oud-West's, suggesting these 
+two are genuinely different in price.
+
+Sample size also matters directly: smaller groups like Hotel room 
+(n=33) and Shared room (n=30) produce much wider, less certain 
+intervals than large groups like Entire home/apt (n=4,530). For a 
+market intelligence consultancy, this means confidence in a "typical 
+price" figure should always be weighed against how many listings that 
+figure is based on, a mean price quoted from 30 listings carries far 
+more uncertainty than one quoted from 4,500.
+
+---
+
+## 5.2 Practical vs. Statistical Significance Summary
+
+Across all four testable hypotheses (H1-H4), every result was 
+statistically significant (p < 0.001 in all cases), but effect sizes 
+varied widely:
+
+- H1 (room type, price): effect size 0.622, large. Statistically 
+  significant AND practically important.
+- H2 (superhost, rating): effect size 0.128, small. Statistically 
+  significant but practically minor.
+- H3 (review count, price): effect size 0.155, small. Statistically 
+  significant but practically modest.
+- H4 (neighbourhood, price): effect size 0.068, small-to-medium. 
+  Statistically significant but explains only ~7% of price variance.
+
+This pattern is a direct result of Amsterdam's large sample size 
+(10,480 listings): with this much data, even small, practically minor 
+differences become statistically detectable. The lesson for any 
+stakeholder reading this report: p-values alone tell you whether an 
+effect exists, but effect sizes tell you whether that effect actually 
+matters. Room/property type (H1) is the only finding in this set 
+large enough to be a primary driver of pricing strategy on its own; 
+the others are real but secondary factors.
+
+---
+
+## 5.2 Cohen's d vs. Rank-Biserial Correlation Note
+
+**Cohen's d for H1 (entire home vs. private room price): 0.345** 
+(small-to-medium effect).
+
+**Why this is smaller than the rank-biserial correlation (0.622, 
+large) reported earlier for the same comparison:** Cohen's d uses raw 
+means and standard deviations. Price has a few very high values that 
+make the standard deviation large, and this makes Cohen's d look 
+smaller than the real difference actually is. Rank-biserial correlation 
+works on the order of values instead of the raw numbers, so it isn't 
+thrown off by those extreme prices. That's why it gives a more honest 
+picture of how different the two groups really are.
+
+**Decision:** Rank-biserial correlation stays as the main effect size 
+used throughout this section, since it matches the tests we actually 
+used (Mann-Whitney U). Cohen's d is shown here once for H1 only, just 
+to directly answer the brief's mention of it, along with this note 
+explaining why it understates the real effect.
+
+---
+
+## 5.3 Correlation & Regression Analysis
+
+**Correlation findings:** Bedrooms (r=0.273), accommodates (r=0.271), 
+and beds (r=0.234) are the strongest numerical correlates with price, 
+all capacity-related. Review score (r=0.038), host tenure (r=-0.003), 
+and minimum nights (r=-0.022) show negligible correlation with price 
+on their own.
+
+**OLS regression:** A multiple linear regression using accommodates, 
+bedrooms, beds, review_scores_rating, availability_365, 
+review_count_computed, and host_tenure_years as predictors of price 
+produced R-squared = 0.096 (the model explains about 9.6% of price 
+variation), with the overall model highly significant (F-statistic 
+p < 0.001).
+
+Significant predictors: accommodates (+€42.72 per additional guest 
+capacity), bedrooms (+€54.59 per bedroom), review_scores_rating 
+(+€46.77 per point, once other factors are held constant), 
+availability_365 (+€0.23 per day), and review_count_computed (-€0.12 
+per review), all p < 0.01. Beds showed a significant but negative 
+coefficient (-€12.41 per bed), discussed below. Host_tenure_years was 
+not significant (p=0.214).
+
+**Multicollinearity check (VIF):** accommodates (3.19), beds (2.87), 
+and bedrooms (2.44) all fall below the conventional concern threshold 
+of 5, and well below the severe threshold of 10 (the const row's VIF 
+of 372.72 is a known statistical artifact and not meaningful). This 
+means multicollinearity is present, as expected for three capacity-
+related variables, but not severe by standard thresholds.
+
+**Interpreting beds' negative coefficient:** Despite VIF values 
+showing only moderate overlap between beds, bedrooms, and accommodates, 
+beds' coefficient flips negative once the other two are included in 
+the model. A plausible explanation: holding accommodates and bedrooms 
+fixed, a higher bed count may signal a more budget, hostel-style 
+configuration (e.g., bunk beds, sofa beds), rather than added value. 
+This should be treated as a tentative interpretation, not a fully 
+confirmed causal finding, given the modest multicollinearity still 
+present.
+
+**Business interpretation:** Capacity (accommodates, bedrooms) remains 
+the strongest, most reliable price driver among the numerical features 
+tested, consistent with the property-type findings in Section 5.1. 
+However, the model's low R-squared (9.6%) confirms that most of what 
+determines price in this market is NOT captured by these basic 
+numerical features alone, property type, neighbourhood, and unmeasured 
+factors like amenities and listing quality likely matter far more. 
+This regression should be read as a useful but limited piece of the 
+overall pricing picture, not a complete price prediction model.
+
+## 5.3 Non-Linear Relationship Check (LOWESS)
+
+**Finding:** The LOWESS curve for price vs. accommodates is clearly 
+non-linear. Price rises steeply from 1 to 4 guests, flattens 
+noticeably between 6 and 10 guests, then rises again toward the 
+high end (12-16 guests).
+
+**Implication:** The OLS regression's linear coefficient for 
+accommodates (+€42.72 per guest) is a reasonable average across the 
+full range, but it overstates the true marginal price increase in the 
+6-10 guest range and may understate it at the very top end (12+ 
+guests). A more accurate model would treat accommodates as a 
+non-linear feature (e.g., using bins or a polynomial term) rather than 
+assuming a constant price increase per additional guest across the 
+entire range.
+
+**Business interpretation:** The biggest price jump happens early, 
+moving from a 1-2 person studio to a 4-person apartment captures most 
+of the capacity-driven price increase. Beyond that, adding a few more 
+guests of capacity (6-10) doesn't proportionally increase price much, 
+suggesting these mid-size properties compete in a fairly narrow price 
+band regardless of exact capacity. Only very large group properties 
+(12+) break into a distinctly higher price tier again, likely a 
+different market segment (event houses, large group stays) rather 
+than a simple continuation of the same pricing logic.
