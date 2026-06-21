@@ -141,27 +141,27 @@ Section 4.2 without further cleaning.
    methodology (the "San Francisco Model"), which assumes a fixed review 
    rate (e.g., 50%) to convert review counts into estimated bookings. 
    This conversion rate is itself debated in research (different studies 
-   use 30.5%–72%). These figures should be treated as directional 
+   use 30.5%-72%). These figures should be treated as directional 
    estimates, not measured revenue.
 
 2. **Point-in-time snapshot, not continuous data.** The entire dataset 
    reflects a single scrape date (2025-09-11 for this file). It is not 
-   a live feed — bookings, cancellations, and price changes happening 
+   a live feed; bookings, cancellations, and price changes happening 
    after this date are not captured.
 
 3. **Calendar price field is unusable.** calendar.csv.gz's price/
-   adjusted_price columns are 100% null for Amsterdam (3.8M rows) — a 
+   adjusted_price columns are 100% null for Amsterdam (3.8M rows), a 
    scraping/data-collection artifact specific to this city/batch. 
    Revenue analysis must rely on listings.csv.gz's pre-computed 
    estimated_revenue_l365d instead.
 
 4. **No guest-side data.** There is no demographic, location, or 
-   booking-date information about guests — only review text and 
+   booking-date information about guests, only review text and 
    reviewer name/ID. This prevents any analysis of who is actually 
    booking, beyond what can be inferred from review language.
 
 5. **No actual financial data.** No real revenue, fees, or operating 
-   cost data exists — all monetary figures are either the host's listed 
+   cost data exists; all monetary figures are either the host's listed 
    price (sometimes missing) or Inside Airbnb's modeled estimate.
 
 6. **Review undercounting.** Not every guest leaves a review, so 
@@ -171,21 +171,21 @@ Section 4.2 without further cleaning.
 
 7. **High missingness in several fields.** price (43.95%), neighbourhood 
    raw field (50.5%), neighborhood_overview (50.5%), host_neighbourhood 
-   (73.4%) — see schema notes above for full detail.
+   (73.4%); see schema notes above for full detail.
 
 8. **Single scrape, no historical trend within this file.** While 
-   reviews.csv spans ~15 years (2010–2025) via review dates, listings.
-   csv.gz itself only reflects the current state — there is no historical 
+   reviews.csv spans ~15 years (2010-2025) via review dates, listings.
+   csv.gz itself only reflects the current state. There is no historical 
    record of past price changes or past availability for a listing.
 
 ---
 
-   ## Assumptions About Ambiguous Fields
+## Assumptions About Ambiguous Fields
 
 1. **price = NaN will be treated as "no price set," not "free listing."** 
    43.95% of listings.csv.gz rows have null price. Assumption: these are 
    listings where the host hasn't published a public price (possibly 
-   inactive, paused, or requiring direct inquiry) — not literally $0. 
+   inactive, paused, or requiring direct inquiry), not literally $0. 
    These rows will be excluded from price-based statistics rather than 
    imputed with 0 or the mean, to avoid distorting price distributions.
 
@@ -214,7 +214,7 @@ Section 4.2 without further cleaning.
    excluded.
 
 6. **neighbourhood_group_cleansed and calendar_updated will be dropped 
-   entirely.** Both are 100% null for Amsterdam — confirmed dead columns, 
+   entirely.** Both are 100% null for Amsterdam, confirmed dead columns, 
    not worth carrying through any pipeline.
 
 7. **review counts will be treated as a lower-bound proxy for bookings, 
@@ -234,28 +234,28 @@ Section 4.2 without further cleaning.
 
 ---
 
-   ## Business Domain Context
+## Business Domain Context
 
 This dataset represents the short-term rental marketplace in Amsterdam 
 as visible on Airbnb at the time of scraping (2025-09-11). Three core 
 entities make up the business model:
 
-**Listing** — A single rental unit (an entire apartment, a private room, 
+**Listing**: A single rental unit (an entire apartment, a private room, 
 or a shared room) that a host has published on the platform for guests 
 to book. Each listing has its own price, location, capacity, amenities, 
 and booking rules (minimum/maximum nights, instant booking availability). 
-A listing is the unit of supply in this marketplace — it's what guests 
+A listing is the unit of supply in this marketplace; it's what guests 
 search for, compare, and ultimately book.
 
-**Host** — The person or entity that owns/manages one or more listings. 
+**Host**: The person or entity that owns/manages one or more listings. 
 Hosts range from individuals renting out a single spare room casually, 
 to commercial operators managing dozens of properties as a business 
-(visible via calculated_host_listings_count). Host attributes — response 
-rate, acceptance rate, superhost status, verification status — function 
-as trust signals that influence a guest's booking decision, similar to 
-a seller's reputation score in any marketplace.
+(visible via calculated_host_listings_count). Host attributes such as 
+response rate, acceptance rate, superhost status, and verification 
+status function as trust signals that influence a guest's booking 
+decision, similar to a seller's reputation score in any marketplace.
 
-**Review** — Feedback left by a guest after a stay, tied to a specific 
+**Review**: Feedback left by a guest after a stay, tied to a specific 
 listing. Reviews serve two roles in this business: (1) a trust/quality 
 signal for future guests deciding whether to book, and (2) the closest 
 available proxy for actual booking activity, since the dataset contains 
@@ -263,10 +263,10 @@ no direct transaction or revenue data. A listing with many recent
 reviews is generally inferred to be actively booked, though this is an 
 imperfect signal (see Assumptions, point 7).
 
-**Neighbourhood** — The geographic grouping (22 distinct areas in 
+**Neighbourhood**: The geographic grouping (22 distinct areas in 
 Amsterdam) used to segment the city for location-based analysis. It 
 functions as the "market" or "submarket" lens through which pricing, 
-density, and demand patterns are typically compared — similar to how a 
+density, and demand patterns are typically compared, similar to how a 
 real estate analyst would segment a city into districts.
 
 Together, these entities support the core questions a market 

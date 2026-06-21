@@ -60,19 +60,19 @@
 
 1. **Denormalization in dim_neighbourhood:** Pre-computed aggregates 
    (median price, listing count, avg rating) trade query speed for 
-   staleness risk — these values are a snapshot, not live-recalculated.
+   staleness risk. These values are a snapshot, not live-recalculated.
 
 2. **No Slowly Changing Dimension (SCD) handling:** dim_host uses 
    SCD Type 1 (always-current, no history) rather than Type 2. 
    Appropriate given Inside Airbnb itself is a single-snapshot 
-   dataset, not a continuous feed — there is no historical host data 
+   dataset, not a continuous feed. There is no historical host data 
    to preserve in the first place.
 
 3. **Listing-grain fact table only:** Chose not to build a second, 
    much larger calendar-grain fact table (3.8M rows) given the 
    project timeline. This means date-level questions (e.g., seasonal 
    occupancy patterns) require falling back to pandas rather than 
-   pure SQL — a deliberate scope trade-off, not an oversight.
+   pure SQL, a deliberate scope trade-off, not an oversight.
 
 4. **PostgreSQL over DuckDB/SQLite:** Chose based on prior hands-on 
    experience to reduce setup risk, accepting the added overhead of 

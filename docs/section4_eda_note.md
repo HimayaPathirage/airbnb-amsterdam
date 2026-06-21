@@ -20,19 +20,19 @@
   5,097) — a small number of long-running listings dominate review 
   volume.
 
-## 4.1 Price Distribution by Room/Property Type — Business Interpretation
+## 4.1 Price Distribution by Room/Property Type - Business Interpretation
 
 Entire-home listings command roughly double the price of private rooms 
 and triple that of shared rooms, with the highest pricing variance and 
 the most extreme high-end outliers concentrated in this category. For 
 a market operator, this suggests entire-home listings are where premium 
-positioning and luxury pricing strategies actually play out — private 
-and shared rooms compete primarily on a tighter, lower price band with 
-limited room for premium differentiation. Houseboats/boats command a 
-modest premium even over standard entire-place listings, reflecting 
-their status as a distinctive, Amsterdam-specific draw — a host 
-considering property type investment would see this as the strongest 
-differentiator after basic capacity/room-type choice.
+positioning and luxury pricing strategies actually play out, while 
+private and shared rooms compete primarily on a tighter, lower price 
+band with limited room for premium differentiation. Houseboats/boats 
+command a modest premium even over standard entire-place listings, 
+reflecting their status as a distinctive, Amsterdam-specific draw, a 
+factor a host considering property type investment would see as the 
+strongest differentiator after basic capacity/room-type choice.
 
 ## 4.1 Price Distribution by Neighbourhood (Top 10) - Business Interpretation
 
