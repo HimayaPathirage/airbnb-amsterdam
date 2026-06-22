@@ -9,12 +9,20 @@ listings.
 
 **Test selected:** Mann-Whitney U test (non-parametric).
 
-**Assumption check:** Independent t-test requires approximately normal 
-data. Shapiro-Wilk test on both groups returned p < 0.001 (effectively 
-p ≈ 0), confirming both distributions deviate significantly from 
-normality (consistent with the known right-skew in price, Section 
-4.1). Mann-Whitney U was selected instead, as it does not require 
-normality, only that data be ordinal/continuous, which holds here.
+**Assumption check:** Shapiro-Wilk testing returned p < 0.001 for both 
+groups, but at this sample size (n=4,530 and n=1,274), this test is 
+very sensitive and tends to flag even small, unimportant deviations 
+from normality, so this result alone isn't strong enough justification. 
+With large samples, the Central Limit Theorem usually means the 
+sampling distribution of the mean can still be roughly normal even if 
+the raw data isn't, which would normally make a standard t-test okay 
+to use despite failing the normality test. The real reason a non-
+parametric test was used here is the size of the skew itself: entire-
+home listings have a standard deviation (369.89) larger than their own 
+mean (301.00), and the data still contains genuinely extreme values 
+even after removing confirmed errors. This level of skew is strong 
+enough that the Central Limit Theorem doesn't fully protect us, so 
+Mann-Whitney U was the safer choice.
 
 **Results:**
 - U statistic: 4,680,826.5
@@ -49,11 +57,15 @@ listings.
 
 **Test selected:** Mann-Whitney U test (non-parametric).
 
-**Assumption check:** Shapiro-Wilk test on both groups returned 
-p < 0.001 (effectively p ≈ 0) for both, confirming severe non-
-normality, consistent with the rating inflation pattern already 
-documented in Section 4.1 (most scores cramped between 4.5 and 5.0). 
-Mann-Whitney U was selected accordingly.
+**Assumption check:** Shapiro-Wilk testing returned p < 0.001 for both 
+groups, but as with H1, this test is too sensitive at this sample size 
+(n=1,813 and n=7,460) and flags even trivial deviations from normality. 
+The Central Limit Theorem would normally let a t-test stay reasonably 
+valid for large samples even when normality fails. But review scores 
+show a different kind of problem here: most values are packed tightly 
+near the top of the scale (rating inflation, Section 4.1), between 4.5 
+and 5.0. This kind of bunching isn't something the Central Limit 
+Theorem fixes well, so Mann-Whitney U was chosen instead.
 
 **Results:**
 - U statistic: 5,894,053.0
@@ -90,10 +102,14 @@ have a significantly different price distribution than listings with
 
 **Test selected:** Mann-Whitney U test (non-parametric).
 
-**Assumption check:** Shapiro-Wilk test on both groups returned 
-p < 0.001 (effectively p ≈ 0) for both, confirming severe non-
-normality (consistent with the known right-skew in price). Mann-
-Whitney U was selected accordingly.
+**Assumption check:** Shapiro-Wilk testing returned p < 0.001 for both 
+groups, but again, this test is overly sensitive at this sample size 
+(n=3,054 and n=2,813) and picks up even minor departures from 
+normality. The Central Limit Theorem can usually make a t-test work 
+fine for large samples even without normal data, but price's heavy 
+right-skew (the same level of skew seen in H1, where the standard 
+deviation is bigger than the mean) is strong enough that this doesn't 
+fully apply here. Mann-Whitney U was used for the same reason as H1.
 
 **Results:**
 - U statistic: 3,627,805.5
@@ -130,13 +146,16 @@ across at least some of Amsterdam's 22 neighbourhoods.
 **Test selected:** Kruskal-Wallis H test (non-parametric one-way 
 ANOVA equivalent).
 
-**Assumption check:** Standard one-way ANOVA requires both normality 
-within groups and homogeneity of variance across groups. Levene's test 
-for equal variances returned p = 2.03 x 10^-7, well below 0.05, 
-confirming variances differ significantly across neighbourhoods. 
-Combined with price's already-documented non-normality (Section 4.1), 
-Kruskal-Wallis was selected as the appropriate non-parametric 
-alternative.
+**Assumption check:** Standard one-way ANOVA needs both normal data 
+within each group and similar variance across groups. Levene's test 
+for equal variances came back at p = 2.03 x 10^-7, well below 0.05, 
+showing the variances across neighbourhoods are genuinely different. 
+This is the main reason standard ANOVA wasn't used, unequal variances 
+aren't something a large sample size can fix on its own. Price's 
+already-known skew (Section 4.1) adds further support, though relying 
+on Shapiro-Wilk alone would be weaker reasoning given how sensitive 
+that test gets at this sample size. Kruskal-Wallis was used instead, 
+as the appropriate non-parametric option here.
 
 **Results:**
 - H statistic: 417.23
