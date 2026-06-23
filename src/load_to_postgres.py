@@ -7,8 +7,13 @@ import pandas as pd
 from sqlalchemy import create_engine
 from enrich import enrich_listings
 
-# Update the password below to match what you used for postgres
-DB_CONNECTION = "postgresql://postgres:postgres123@localhost:5432/airbnb_amsterdam"
+import os
+from dotenv import load_dotenv
+
+load_dotenv()  # reads .env file into environment variables
+
+DB_PASSWORD = os.getenv("DB_PASSWORD")
+DB_CONNECTION = f"postgresql://postgres:{DB_PASSWORD}@localhost:5432/airbnb_amsterdam"
 
 
 def build_dim_host(df):

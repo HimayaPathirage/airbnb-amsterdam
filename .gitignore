@@ -27,3 +27,5 @@ Thumbs.db
 # Large generated outputs
 *.log
 *.db
+
+.env
